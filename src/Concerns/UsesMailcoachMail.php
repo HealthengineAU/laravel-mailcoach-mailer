@@ -106,12 +106,8 @@ trait UsesMailcoachMail
         return $this;
     }
 
-    public function storing(?bool $value): self
+    public function storing(bool $value): self
     {
-        if ($value === null) {
-            return $this;
-        }
-
         $this->withSymfonyMessage(function (Email $email) use ($value) {
             $storeHeader = new StoreHeader($value);
 
@@ -125,12 +121,8 @@ trait UsesMailcoachMail
         return $this;
     }
 
-    public function storingContent(?bool $value): self
+    public function storingContent(bool $value): self
     {
-        if ($value === null) {
-            return $this;
-        }
-
         $this->withSymfonyMessage(function (Email $email) use ($value) {
             $storeContentHeader = new StoreContentHeader($value);
 
