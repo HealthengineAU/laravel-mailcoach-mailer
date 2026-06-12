@@ -27,6 +27,8 @@ class TemplateMail extends Mailable
                 'replacementName' => 'replacementValue',
             ], 'transactional-mailer')
             ->replacing('singleName', 'singleValue')
-            ->replacing(['multipleName' => 'multipleValue']);
+            ->replacing(['multipleName' => 'multipleValue'])
+            ->storing(false)
+            ->storingContent(false);
     }
 }
