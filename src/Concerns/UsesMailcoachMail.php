@@ -5,6 +5,8 @@ namespace Spatie\MailcoachMailer\Concerns;
 use Spatie\MailcoachMailer\Headers\FakeHeader;
 use Spatie\MailcoachMailer\Headers\MailerHeader;
 use Spatie\MailcoachMailer\Headers\ReplacementHeader;
+use Spatie\MailcoachMailer\Headers\StoreContentHeader;
+use Spatie\MailcoachMailer\Headers\StoreHeader;
 use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
 use Symfony\Component\Mime\Email;
 
@@ -100,6 +102,36 @@ trait UsesMailcoachMail
         if ($this->subject) {
             $message->subject($this->subject);
         }
+
+        return $this;
+    }
+
+    public function storing(bool $value): self
+    {
+        $this->withSymfonyMessage(function (Email $email) use ($value) {
+            $storeHeader = new StoreHeader($value);
+
+            if ($email->getHeaders()->has($storeHeader->getName())) {
+                $email->getHeaders()->remove($storeHeader->getName());
+            }
+
+            $email->getHeaders()->add($storeHeader);
+        });
+
+        return $this;
+    }
+
+    public function storingContent(bool $value): self
+    {
+        $this->withSymfonyMessage(function (Email $email) use ($value) {
+            $storeContentHeader = new StoreContentHeader($value);
+
+            if ($email->getHeaders()->has($storeContentHeader->getName())) {
+                $email->getHeaders()->remove($storeContentHeader->getName());
+            }
+
+            $email->getHeaders()->add($storeContentHeader);
+        });
 
         return $this;
     }

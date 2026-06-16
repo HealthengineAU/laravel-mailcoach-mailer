@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-mailcoach-mailer` will be documented in this file.
 
+## 1.5.3 - 2026-06-12
+
+### What's Changed
+
+* Add `storing()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what value to send for `store` request
+  parameter to Mailcoach API.
+* Add `storingContent()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what value to send for
+  `store_content` request parameter to Mailcoach API. Please note that `store_content` is a custom request parameter
+  that must be implemented yourself in self-hosted Mailcoach.
+
 ## 1.5.2 - 2025-02-20
 
 ### What's Changed

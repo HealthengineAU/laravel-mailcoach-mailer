@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Notification;
+use Spatie\MailcoachMailer\Notifications\MailcoachMessage;
 use Spatie\MailcoachMailer\Tests\TestSupport\Notifications\TestNotification;
 
 beforeEach(function () {
@@ -65,4 +66,24 @@ it('can inspect mailcoach message', function () {
         'singleName' => 'singleValue',
         'multipleName' => 'multipleValue',
     ]);
+});
+
+it('can send a notification that disables storage', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['store'])->toBe('0');
+    });
+
+    Notification::route('mail', 'to@example.com')->notify(new TestNotification());
+});
+
+it('can send a notification that disables content storage', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['store_content'])->toBe('0');
+    });
+
+    Notification::route('mail', 'to@example.com')->notify(new TestNotification());
 });
