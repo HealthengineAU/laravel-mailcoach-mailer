@@ -8,7 +8,6 @@ use Spatie\MailcoachMailer\Headers\FakeHeader;
 use Spatie\MailcoachMailer\Headers\MailerHeader;
 use Spatie\MailcoachMailer\Headers\ReplacementHeader;
 use Spatie\MailcoachMailer\Headers\StoreContentHeader;
-use Spatie\MailcoachMailer\Headers\StoreHeader;
 use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
 use Symfony\Component\Mime\Email;
 
