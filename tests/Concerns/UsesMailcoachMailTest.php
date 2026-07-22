@@ -82,16 +82,6 @@ it('can send a mail that uses a different mailer', function () {
     Mail::to('to@example.com')->send(new TemplateMail);
 });
 
-it('can send a mail that disables storage', function () {
-    expectResponse(function (string $method, string $url, array $options) {
-        $body = json_decode($options['body'], true);
-
-        expect($body['store'])->toBe('0');
-    });
-
-    Mail::to('to@example.com')->send(new TemplateMail);
-});
-
 it('can send a mail that disables content storage', function () {
     expectResponse(function (string $method, string $url, array $options) {
         $body = json_decode($options['body'], true);

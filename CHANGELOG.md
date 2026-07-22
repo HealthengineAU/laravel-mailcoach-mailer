@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-mailcoach-mailer` will be documented in this file.
 
+## 1.5.4 - 2026-07-22
+
+### What's Changed
+
+* Removed `storing()` from `MailcoachMessage` and `UsesMailcoachMail`, which was used to indicate what value to send for
+  `store` request parameter to Mailcoach API. This was removed to guarantee that `SentMessage` always has the
+  transactional mail log item UUID as the message ID.
+
 ## 1.5.3 - 2026-06-12
 
 ### What's Changed

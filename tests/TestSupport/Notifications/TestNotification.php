@@ -19,7 +19,6 @@ class TestNotification extends Notification
             ->usingMailer('transactional-mailer')
             ->replacing('singleName', 'singleValue')
             ->replacing(['multipleName' => 'multipleValue'])
-            ->storing(false)
             ->storingContent(false)
             ->from('from@example.com');
     }

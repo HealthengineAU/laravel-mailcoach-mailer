@@ -97,23 +97,6 @@ class MailcoachMessage extends MailMessage
         return $this;
     }
 
-    public function storing(bool $value): self
-    {
-        $this->store = $value;
-
-        $this->withSymfonyMessage(function (Email $email) use ($value): void {
-            $storeHeader = new StoreHeader($value);
-
-            if ($email->getHeaders()->has($storeHeader->getName())) {
-                $email->getHeaders()->remove($storeHeader->getName());
-            }
-
-            $email->getHeaders()->add($storeHeader);
-        });
-
-        return $this;
-    }
-
     public function storingContent(bool $value): self
     {
         $this->storeContent = $value;
