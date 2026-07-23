@@ -8,7 +8,6 @@ use Spatie\MailcoachMailer\Headers\FakeHeader;
 use Spatie\MailcoachMailer\Headers\MailerHeader;
 use Spatie\MailcoachMailer\Headers\ReplacementHeader;
 use Spatie\MailcoachMailer\Headers\StoreContentHeader;
-use Spatie\MailcoachMailer\Headers\StoreHeader;
 use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
 use Symfony\Component\Mime\Email;
 
@@ -19,8 +18,6 @@ class MailcoachMessage extends MailMessage
     public array $replacements = [];
 
     public bool $fake = false;
-
-    public bool $store = true;
 
     public bool $storeContent = true;
 
@@ -92,23 +89,6 @@ class MailcoachMessage extends MailMessage
             }
 
             $email->getHeaders()->add($fakeHeader);
-        });
-
-        return $this;
-    }
-
-    public function storing(bool $value): self
-    {
-        $this->store = $value;
-
-        $this->withSymfonyMessage(function (Email $email) use ($value): void {
-            $storeHeader = new StoreHeader($value);
-
-            if ($email->getHeaders()->has($storeHeader->getName())) {
-                $email->getHeaders()->remove($storeHeader->getName());
-            }
-
-            $email->getHeaders()->add($storeHeader);
         });
 
         return $this;
