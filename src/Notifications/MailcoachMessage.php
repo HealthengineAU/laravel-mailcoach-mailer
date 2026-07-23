@@ -19,8 +19,6 @@ class MailcoachMessage extends MailMessage
 
     public bool $fake = false;
 
-    public bool $store = true;
-
     public bool $storeContent = true;
 
     public function usingMail(string $mailName): self
