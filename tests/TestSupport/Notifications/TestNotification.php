@@ -20,6 +20,7 @@ class TestNotification extends Notification
             ->replacing('singleName', 'singleValue')
             ->replacing(['multipleName' => 'multipleValue'])
             ->storingContent(false)
+            ->usingGoogleAnalytics('campaign-name', ['example.com', 'example.org'])
             ->from('from@example.com');
     }
 }

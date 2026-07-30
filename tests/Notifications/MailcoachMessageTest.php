@@ -66,6 +66,8 @@ it('can inspect mailcoach message', function () {
         'singleName' => 'singleValue',
         'multipleName' => 'multipleValue',
     ]);
+    expect($mailcoachMessage->googleAnalyticsCampaign)->toBe('campaign-name');
+    expect($mailcoachMessage->googleAnalyticsDomains)->toBe(['example.com', 'example.org']);
 });
 
 it('can send a notification that disables content storage', function () {
@@ -73,6 +75,17 @@ it('can send a notification that disables content storage', function () {
         $body = json_decode($options['body'], true);
 
         expect($body['store_content'])->toBe('0');
+    });
+
+    Notification::route('mail', 'to@example.com')->notify(new TestNotification());
+});
+
+it('can send a notification that sets Google Analytics campaign and domains', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['google_analytics_campaign'])->toBe('campaign-name');
+        expect($body['google_analytics_domains'])->toBe(['example.com', 'example.org']);
     });
 
     Notification::route('mail', 'to@example.com')->notify(new TestNotification());

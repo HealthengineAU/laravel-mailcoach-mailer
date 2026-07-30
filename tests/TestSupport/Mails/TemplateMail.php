@@ -28,6 +28,7 @@ class TemplateMail extends Mailable
             ], 'transactional-mailer')
             ->replacing('singleName', 'singleValue')
             ->replacing(['multipleName' => 'multipleValue'])
-            ->storingContent(false);
+            ->storingContent(false)
+            ->usingGoogleAnalytics('campaign-name', ['example.com', 'example.org']);
     }
 }
