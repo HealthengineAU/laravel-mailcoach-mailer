@@ -2,6 +2,17 @@
 
 All notable changes to `laravel-mailcoach-mailer` will be documented in this file.
 
+## 1.5.5 - 2026-07-30
+
+### What's Changed
+
+* Add `usingGoogleAnalytics()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what values to send for the
+  `google_analytics_campaign` and `google_analytics_domains` request parameters to Mailcoach API. Please note that both
+  parameters are custom request parameters that must be implemented yourself in self-hosted Mailcoach.
+* Require `spatie/mailcoach-mailer` `^1.6`.
+* Fix the test HTTP mock returning `MessageID` instead of `uuid`, which broke every test that sends a mail since
+  `spatie/mailcoach-mailer` v1.5.0.
+
 ## 1.5.4 - 2026-07-22
 
 ### What's Changed

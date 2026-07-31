@@ -14,7 +14,7 @@ function expectResponse(callable $expectations): void
     $client = new MockHttpClient(function (string $method, string $url, array $options) use ($expectations): ResponseInterface {
         $expectations($method, $url, $options);
 
-        return new MockResponse(json_encode(['MessageID' => 'foobar']), [
+        return new MockResponse(json_encode(['uuid' => 'foobar']), [
             'http_code' => 200,
         ]);
     });
