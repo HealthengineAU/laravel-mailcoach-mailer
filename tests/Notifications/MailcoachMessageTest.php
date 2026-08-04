@@ -90,3 +90,13 @@ it('can send a notification that sets Google Analytics campaign and domains', fu
 
     Notification::route('mail', 'to@example.com')->notify(new TestNotification());
 });
+
+it('can send a notification that sets webhook', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['webhook'])->toBe('https://spatie.be/');
+    });
+
+    Notification::route('mail', 'to@example.com')->notify(new TestNotification());
+});

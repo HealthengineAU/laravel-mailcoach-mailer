@@ -29,6 +29,7 @@ class TemplateMail extends Mailable
             ->replacing('singleName', 'singleValue')
             ->replacing(['multipleName' => 'multipleValue'])
             ->storingContent(false)
-            ->usingGoogleAnalytics('campaign-name', ['example.com', 'example.org']);
+            ->usingGoogleAnalytics('campaign-name', ['example.com', 'example.org'])
+            ->usingWebhook('https://spatie.be/');
     }
 }

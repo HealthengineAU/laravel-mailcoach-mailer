@@ -21,6 +21,7 @@ class TestNotification extends Notification
             ->replacing(['multipleName' => 'multipleValue'])
             ->storingContent(false)
             ->usingGoogleAnalytics('campaign-name', ['example.com', 'example.org'])
+            ->usingWebhook('https://spatie.be/')
             ->from('from@example.com');
     }
 }

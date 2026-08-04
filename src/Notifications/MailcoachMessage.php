@@ -11,6 +11,7 @@ use Spatie\MailcoachMailer\Headers\MailerHeader;
 use Spatie\MailcoachMailer\Headers\ReplacementHeader;
 use Spatie\MailcoachMailer\Headers\StoreContentHeader;
 use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
+use Spatie\MailcoachMailer\Headers\WebhookHeader;
 use Symfony\Component\Mime\Email;
 
 class MailcoachMessage extends MailMessage
@@ -26,6 +27,8 @@ class MailcoachMessage extends MailMessage
     public ?string $googleAnalyticsCampaign = null;
 
     public array $googleAnalyticsDomains = [];
+
+    public ?string $webhook = null;
 
     public function usingMail(string $mailName): self
     {
@@ -133,6 +136,23 @@ class MailcoachMessage extends MailMessage
 
                 $email->getHeaders()->add($header);
             }
+        });
+
+        return $this;
+    }
+
+    public function usingWebhook(string $webhookUrl): self
+    {
+        $this->webhook = $webhookUrl;
+
+        $this->withSymfonyMessage(function (Email $email) use ($webhookUrl): void {
+            $webhookHeader = new WebhookHeader($webhookUrl);
+
+            if ($email->getHeaders()->has($webhookHeader->getName())) {
+                $email->getHeaders()->remove($webhookHeader->getName());
+            }
+
+            $email->getHeaders()->add($webhookHeader);
         });
 
         return $this;

@@ -9,6 +9,7 @@ use Spatie\MailcoachMailer\Headers\MailerHeader;
 use Spatie\MailcoachMailer\Headers\ReplacementHeader;
 use Spatie\MailcoachMailer\Headers\StoreContentHeader;
 use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
+use Spatie\MailcoachMailer\Headers\WebhookHeader;
 use Symfony\Component\Mime\Email;
 
 /** @mixin \Illuminate\Mail\Mailable */
@@ -135,6 +136,21 @@ trait UsesMailcoachMail
 
                 $email->getHeaders()->add($header);
             }
+        });
+
+        return $this;
+    }
+
+    public function usingWebhook(string $webhookUrl): self
+    {
+        $this->withSymfonyMessage(function (Email $email) use ($webhookUrl) {
+            $webhookHeader = new WebhookHeader($webhookUrl);
+
+            if ($email->getHeaders()->has($webhookHeader->getName())) {
+                $email->getHeaders()->remove($webhookHeader->getName());
+            }
+
+            $email->getHeaders()->add($webhookHeader);
         });
 
         return $this;
