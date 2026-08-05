@@ -68,6 +68,7 @@ it('can inspect mailcoach message', function () {
     ]);
     expect($mailcoachMessage->googleAnalyticsCampaign)->toBe('campaign-name');
     expect($mailcoachMessage->googleAnalyticsDomains)->toBe(['example.com', 'example.org']);
+    expect($mailcoachMessage->webhook)->toBe('https://spatie.be/');
 });
 
 it('can send a notification that disables content storage', function () {
