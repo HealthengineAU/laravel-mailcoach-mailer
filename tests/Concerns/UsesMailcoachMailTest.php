@@ -102,3 +102,13 @@ it('can send a mail that sets Google Analytics campaign and domains', function (
 
     Mail::to('to@example.com')->send(new TemplateMail);
 });
+
+it('can send a mail that sets webhook', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['webhook'])->toBe('https://spatie.be/');
+    });
+
+    Mail::to('to@example.com')->send(new TemplateMail);
+});

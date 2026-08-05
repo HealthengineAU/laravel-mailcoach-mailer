@@ -68,6 +68,7 @@ it('can inspect mailcoach message', function () {
     ]);
     expect($mailcoachMessage->googleAnalyticsCampaign)->toBe('campaign-name');
     expect($mailcoachMessage->googleAnalyticsDomains)->toBe(['example.com', 'example.org']);
+    expect($mailcoachMessage->webhook)->toBe('https://spatie.be/');
 });
 
 it('can send a notification that disables content storage', function () {
@@ -86,6 +87,16 @@ it('can send a notification that sets Google Analytics campaign and domains', fu
 
         expect($body['google_analytics_campaign'])->toBe('campaign-name');
         expect($body['google_analytics_domains'])->toBe(['example.com', 'example.org']);
+    });
+
+    Notification::route('mail', 'to@example.com')->notify(new TestNotification());
+});
+
+it('can send a notification that sets webhook', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['webhook'])->toBe('https://spatie.be/');
     });
 
     Notification::route('mail', 'to@example.com')->notify(new TestNotification());

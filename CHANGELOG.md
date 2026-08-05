@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-mailcoach-mailer` will be documented in this file.
 
+## 1.5.6 - 2026-08-05
+
+* Added `usingWebhook()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what should be used as a webhook URL
+  to pass on mail provider delivery events for the message. This requires you to implement the `webhook` parameter
+  yourself in self-hosted Mailcoach.
+
 ## 1.5.5 - 2026-07-30
 
 ### What's Changed
