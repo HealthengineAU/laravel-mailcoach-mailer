@@ -2,6 +2,7 @@
 
 namespace Spatie\MailcoachMailer\Concerns;
 
+use Illuminate\Mail\Mailable;
 use Spatie\MailcoachMailer\Headers\FakeHeader;
 use Spatie\MailcoachMailer\Headers\GoogleAnalyticsCampaignHeader;
 use Spatie\MailcoachMailer\Headers\GoogleAnalyticsDomainsHeader;
@@ -12,7 +13,7 @@ use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
 use Spatie\MailcoachMailer\Headers\WebhookHeader;
 use Symfony\Component\Mime\Email;
 
-/** @mixin \Illuminate\Mail\Mailable */
+/** @mixin Mailable */
 trait UsesMailcoachMail
 {
     private bool $usingMailcoachMail = false;
