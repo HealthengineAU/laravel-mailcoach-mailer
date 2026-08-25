@@ -19,6 +19,9 @@ class TestNotification extends Notification
             ->usingMailer('transactional-mailer')
             ->replacing('singleName', 'singleValue')
             ->replacing(['multipleName' => 'multipleValue'])
+            ->storingContent(false)
+            ->usingGoogleAnalytics('campaign-name', ['example.com', 'example.org'])
+            ->usingWebhook('https://spatie.be/')
             ->from('from@example.com');
     }
 }
