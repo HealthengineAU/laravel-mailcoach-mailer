@@ -2,6 +2,24 @@
 
 All notable changes to `laravel-mailcoach-mailer` will be documented in this file.
 
+## 1.7.0 - 2026-08-25
+
+### What's Changed
+
+* Add `storingContent()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what value to send for the
+  `store_content` request parameter to Mailcoach API. Please note that `store_content` is a custom request parameter
+  that must be implemented yourself in self-hosted Mailcoach.
+* Add `usingGoogleAnalytics()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what values to send for the
+  `google_analytics_campaign` and `google_analytics_domains` request parameters to Mailcoach API. Please note that both
+  parameters are custom request parameters that must be implemented yourself in self-hosted Mailcoach.
+* Add `usingWebhook()` to `MailcoachMessage` and `UsesMailcoachMail`, to indicate what should be used as a webhook URL
+  to pass on mail provider delivery events for the message. This requires you to implement the `webhook` parameter
+  yourself in self-hosted Mailcoach.
+* Require `spatie/mailcoach-mailer` `^1.7` from `HealthengineAU/mailcoach-mailer`.
+* Restore support for PHP 8.3, which was dropped in 1.6.0.
+* Fix the test HTTP mock returning `MessageID` instead of `uuid`, which broke every test that sends a mail since
+  `spatie/mailcoach-mailer` v1.5.0.
+
 ## 1.6.0 - 2026-03-06
 
 ### What's Changed
