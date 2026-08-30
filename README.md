@@ -42,6 +42,34 @@ public function toMail()
 }
 ```
 
+## Installing this fork
+
+This fork requires `spatie/mailcoach-mailer` `^1.7`, which only exists in [HealthengineAU/mailcoach-mailer](https://github.com/HealthengineAU/mailcoach-mailer). Composer ignores a dependency's `repositories`, so the consuming application must declare both forks in its own root `composer.json`:
+
+```json
+"repositories": {
+    "spatie/laravel-mailcoach-mailer": {
+        "type": "vcs",
+        "url": "https://github.com/HealthengineAU/laravel-mailcoach-mailer.git"
+    },
+    "spatie/mailcoach-mailer": {
+        "type": "vcs",
+        "url": "https://github.com/HealthengineAU/mailcoach-mailer.git"
+    }
+}
+```
+
+## Custom parameters
+
+These methods are available on both `UsesMailcoachMail` mailables and `MailcoachMessage` notifications. They map to custom request parameters that must be implemented in your self-hosted Mailcoach; hosted Mailcoach ignores them.
+
+```php
+$this
+    ->storingContent(false) // store_content
+    ->usingGoogleAnalytics('campaign-name', ['example.com']) // google_analytics_campaign, google_analytics_domains
+    ->usingWebhook('https://example.com/webhooks/mail'); // webhook
+```
+
 ## Support us
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-mailcoach-mailer.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-mailcoach-mailer)

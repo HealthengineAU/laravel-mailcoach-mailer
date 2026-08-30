@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Notification;
+use Spatie\MailcoachMailer\Tests\TestSupport\Notifications\PlainNotification;
 use Spatie\MailcoachMailer\Tests\TestSupport\Notifications\TestNotification;
 
 beforeEach(function () {
@@ -100,4 +101,19 @@ it('can send a notification that sets webhook', function () {
     });
 
     Notification::route('mail', 'to@example.com')->notify(new TestNotification);
+});
+
+it('omits custom parameters when they are not configured', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body)->not->toHaveKeys([
+            'store_content',
+            'google_analytics_campaign',
+            'google_analytics_domains',
+            'webhook',
+        ]);
+    });
+
+    Notification::route('mail', 'to@example.com')->notify(new PlainNotification);
 });

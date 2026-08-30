@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Mail;
+use Spatie\MailcoachMailer\Tests\TestSupport\Mails\RepeatedOptionsMail;
 use Spatie\MailcoachMailer\Tests\TestSupport\Mails\TemplateMail;
 use Spatie\MailcoachMailer\Tests\TestSupport\Mails\TestMail;
 
@@ -111,4 +112,32 @@ it('can send a mail that sets webhook', function () {
     });
 
     Mail::to('to@example.com')->send(new TemplateMail);
+});
+
+it('omits custom parameters when they are not configured', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body)->not->toHaveKeys([
+            'store_content',
+            'google_analytics_campaign',
+            'google_analytics_domains',
+            'webhook',
+        ]);
+    });
+
+    Mail::to('to@example.com')->send(new TestMail);
+});
+
+it('uses the last value when a custom parameter is set twice', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['store_content'])->toBe('1');
+        expect($body['google_analytics_campaign'])->toBe('campaign-name');
+        expect($body['google_analytics_domains'])->toBe(['example.com']);
+        expect($body['webhook'])->toBe('https://spatie.be/');
+    });
+
+    Mail::to('to@example.com')->send(new RepeatedOptionsMail);
 });

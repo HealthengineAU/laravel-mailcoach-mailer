@@ -75,8 +75,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "replace": {
-        "spatie/laravel-mailcoach-mailer": "*"
-    }
+    "prefer-stable": true
 }

@@ -16,6 +16,8 @@ use Symfony\Component\Mime\Email;
 /** @mixin Mailable */
 trait UsesMailcoachMail
 {
+    use ReplacesHeaders;
+
     private bool $usingMailcoachMail = false;
 
     public function mailcoachMail(string $mailName, array $replacements = [], ?string $mailer = null, ?bool $fake = null): self
@@ -29,13 +31,7 @@ trait UsesMailcoachMail
         $this->faking($fake);
 
         $this->withSymfonyMessage(function (Email $email) use ($mailName) {
-            $transactionalHeader = new TransactionalMailHeader($mailName);
-
-            if ($email->getHeaders()->has($transactionalHeader->getName())) {
-                $email->getHeaders()->remove($transactionalHeader->getName());
-            }
-
-            $email->getHeaders()->add($transactionalHeader);
+            $this->replaceHeader($email, new TransactionalMailHeader($mailName));
         });
 
         return $this;
@@ -48,13 +44,7 @@ trait UsesMailcoachMail
         }
 
         $this->withSymfonyMessage(function (Email $email) use ($mailer) {
-            $mailerHeader = new MailerHeader($mailer);
-
-            if ($email->getHeaders()->has($mailerHeader->getName())) {
-                $email->getHeaders()->remove($mailerHeader->getName());
-            }
-
-            $email->getHeaders()->add($mailerHeader);
+            $this->replaceHeader($email, new MailerHeader($mailer));
         });
 
         return $this;
@@ -84,13 +74,7 @@ trait UsesMailcoachMail
         }
 
         $this->withSymfonyMessage(function (Email $email) use ($value) {
-            $fakeHeader = new FakeHeader($value);
-
-            if ($email->getHeaders()->has($fakeHeader->getName())) {
-                $email->getHeaders()->remove($fakeHeader->getName());
-            }
-
-            $email->getHeaders()->add($fakeHeader);
+            $this->replaceHeader($email, new FakeHeader($value));
         });
 
         return $this;
@@ -112,13 +96,7 @@ trait UsesMailcoachMail
     public function storingContent(bool $value): self
     {
         $this->withSymfonyMessage(function (Email $email) use ($value) {
-            $storeContentHeader = new StoreContentHeader($value);
-
-            if ($email->getHeaders()->has($storeContentHeader->getName())) {
-                $email->getHeaders()->remove($storeContentHeader->getName());
-            }
-
-            $email->getHeaders()->add($storeContentHeader);
+            $this->replaceHeader($email, new StoreContentHeader($value));
         });
 
         return $this;
@@ -126,17 +104,12 @@ trait UsesMailcoachMail
 
     public function usingGoogleAnalytics(string $campaign, array $domains): self
     {
-        $this->withSymfonyMessage(function (Email $email) use ($campaign, $domains) {
-            $campaignHeader = new GoogleAnalyticsCampaignHeader($campaign);
-            $domainsHeader = new GoogleAnalyticsDomainsHeader($domains);
+        $campaignHeader = new GoogleAnalyticsCampaignHeader($campaign);
+        $domainsHeader = new GoogleAnalyticsDomainsHeader($domains);
 
-            foreach ([$campaignHeader, $domainsHeader] as $header) {
-                if ($email->getHeaders()->has($header->getName())) {
-                    $email->getHeaders()->remove($header->getName());
-                }
-
-                $email->getHeaders()->add($header);
-            }
+        $this->withSymfonyMessage(function (Email $email) use ($campaignHeader, $domainsHeader) {
+            $this->replaceHeader($email, $campaignHeader);
+            $this->replaceHeader($email, $domainsHeader);
         });
 
         return $this;
@@ -145,13 +118,7 @@ trait UsesMailcoachMail
     public function usingWebhook(string $webhookUrl): self
     {
         $this->withSymfonyMessage(function (Email $email) use ($webhookUrl) {
-            $webhookHeader = new WebhookHeader($webhookUrl);
-
-            if ($email->getHeaders()->has($webhookHeader->getName())) {
-                $email->getHeaders()->remove($webhookHeader->getName());
-            }
-
-            $email->getHeaders()->add($webhookHeader);
+            $this->replaceHeader($email, new WebhookHeader($webhookUrl));
         });
 
         return $this;
