@@ -5,9 +5,13 @@ namespace Spatie\MailcoachMailer\Notifications;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Arr;
 use Spatie\MailcoachMailer\Headers\FakeHeader;
+use Spatie\MailcoachMailer\Headers\GoogleAnalyticsCampaignHeader;
+use Spatie\MailcoachMailer\Headers\GoogleAnalyticsDomainsHeader;
 use Spatie\MailcoachMailer\Headers\MailerHeader;
 use Spatie\MailcoachMailer\Headers\ReplacementHeader;
+use Spatie\MailcoachMailer\Headers\StoreContentHeader;
 use Spatie\MailcoachMailer\Headers\TransactionalMailHeader;
+use Spatie\MailcoachMailer\Headers\WebhookHeader;
 use Symfony\Component\Mime\Email;
 
 class MailcoachMessage extends MailMessage
@@ -17,6 +21,14 @@ class MailcoachMessage extends MailMessage
     public array $replacements = [];
 
     public bool $fake = false;
+
+    public bool $storeContent = true;
+
+    public ?string $googleAnalyticsCampaign = null;
+
+    public array $googleAnalyticsDomains = [];
+
+    public ?string $webhook = null;
 
     public function usingMail(string $mailName): self
     {
@@ -86,6 +98,61 @@ class MailcoachMessage extends MailMessage
             }
 
             $email->getHeaders()->add($fakeHeader);
+        });
+
+        return $this;
+    }
+
+    public function storingContent(bool $value): self
+    {
+        $this->storeContent = $value;
+
+        $this->withSymfonyMessage(function (Email $email) use ($value): void {
+            $storeContentHeader = new StoreContentHeader($value);
+
+            if ($email->getHeaders()->has($storeContentHeader->getName())) {
+                $email->getHeaders()->remove($storeContentHeader->getName());
+            }
+
+            $email->getHeaders()->add($storeContentHeader);
+        });
+
+        return $this;
+    }
+
+    public function usingGoogleAnalytics(string $campaign, array $domains): self
+    {
+        $this->googleAnalyticsCampaign = $campaign;
+        $this->googleAnalyticsDomains = array_values($domains);
+
+        $this->withSymfonyMessage(function (Email $email) use ($campaign, $domains): void {
+            $campaignHeader = new GoogleAnalyticsCampaignHeader($campaign);
+            $domainsHeader = new GoogleAnalyticsDomainsHeader($domains);
+
+            foreach ([$campaignHeader, $domainsHeader] as $header) {
+                if ($email->getHeaders()->has($header->getName())) {
+                    $email->getHeaders()->remove($header->getName());
+                }
+
+                $email->getHeaders()->add($header);
+            }
+        });
+
+        return $this;
+    }
+
+    public function usingWebhook(string $webhookUrl): self
+    {
+        $this->webhook = $webhookUrl;
+
+        $this->withSymfonyMessage(function (Email $email) use ($webhookUrl): void {
+            $webhookHeader = new WebhookHeader($webhookUrl);
+
+            if ($email->getHeaders()->has($webhookHeader->getName())) {
+                $email->getHeaders()->remove($webhookHeader->getName());
+            }
+
+            $email->getHeaders()->add($webhookHeader);
         });
 
         return $this;

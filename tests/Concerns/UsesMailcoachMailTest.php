@@ -81,3 +81,34 @@ it('can send a mail that uses a different mailer', function () {
 
     Mail::to('to@example.com')->send(new TemplateMail);
 });
+
+it('can send a mail that disables content storage', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['store_content'])->toBe('0');
+    });
+
+    Mail::to('to@example.com')->send(new TemplateMail);
+});
+
+it('can send a mail that sets Google Analytics campaign and domains', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['google_analytics_campaign'])->toBe('campaign-name');
+        expect($body['google_analytics_domains'])->toBe(['example.com', 'example.org']);
+    });
+
+    Mail::to('to@example.com')->send(new TemplateMail);
+});
+
+it('can send a mail that sets webhook', function () {
+    expectResponse(function (string $method, string $url, array $options) {
+        $body = json_decode($options['body'], true);
+
+        expect($body['webhook'])->toBe('https://spatie.be/');
+    });
+
+    Mail::to('to@example.com')->send(new TemplateMail);
+});
